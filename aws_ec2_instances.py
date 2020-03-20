@@ -4,8 +4,6 @@ import boto3, botocore.exceptions
 import argparse
 import logging
 import sys
-import re
-import json
 from operator import itemgetter
 
 def main(args):
@@ -27,6 +25,8 @@ def main(args):
     return 0
 
 def getInstancesjson(ec2,tag_key):
+    
+    # TODO: Add options to print more instance details.
     
     instances = [ ]
     
@@ -57,6 +57,8 @@ def getInstancesjson(ec2,tag_key):
     return sorted(instances,key=itemgetter(tag_key))
     
 def output(instances):
+    
+    # TODO: print options: csv. Add cli input flag to override to json?
     
     for instance in instances:
         print(instance)
