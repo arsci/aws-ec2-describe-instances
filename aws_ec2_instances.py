@@ -3,6 +3,7 @@
 import boto3, botocore.exceptions
 import argparse
 import logging
+from operator import itemgetter
 
 def main(args):
     
@@ -13,11 +14,14 @@ def main(args):
     
     ec2 = boto3.client('ec2')
     
-    print(getInstancesjson(ec2))
+    instances = getInstancesjson(ec2,args.tag)
+    
+    for instance in instances:
+        print(instance)
     
     return 0
 
-def getInstancesjson(ec2):
+def getInstancesjson(ec2,tag_key):
     
     instances = [ ]
     
@@ -32,16 +36,16 @@ def getInstancesjson(ec2):
             }
             
             for tag in instance['Tags']:
-                if 'Owner' in tag['Key']:
-                    instance_details['Owner'] = tag['Value']
+                if tag_key in tag['Key']:
+                    instance_details[tag_key] = tag['Value']
                     break
                     
                 else: 
-                    instance_details['Owner'] = 'unknown'
+                    instance_details[tag_key] = 'unknown'
         
         instances.append(instance_details)
     
-    return instances
+    return sorted(instances,key=itemgetter(tag_key))
     
 def parseArgs():
     
