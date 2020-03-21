@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import boto3, botocore.exceptions
+import boto3
 import argparse
 import logging
-import sys
 from operator import itemgetter
 import json
 
@@ -63,9 +62,11 @@ def getInstancesjson(ec2,tag_key,fields):
             if fields:
                 fieldArr = fields.split(',')
                 for field in fieldArr:
+                    # Handle string and JSON objects in additional fields
                     if(isinstance(instance[field],str)):
                         instance_details[field] = instance[field]
                     elif(isinstance(instance[field],dict)):
+                        # Attempt to flatten any JSON object for formatting
                         instance_details[field] = json.dumps(instance[field], indent=4, sort_keys=True, default=str).replace('\n','').replace(' ','').replace('"','')
         
             instances.append(instance_details)
