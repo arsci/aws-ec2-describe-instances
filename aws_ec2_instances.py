@@ -51,7 +51,6 @@ def getInstancesjson(ec2,tag_key,fields):
                     if tag_key in tag['Key']:
                         instance_details[tag_key] = tag['Value']
                         break
-                        
                     else: 
                         instance_details[tag_key] = 'unknown'
             else:
@@ -93,6 +92,8 @@ def output(instances,output):
         logging.info('Generating JSON output')
         for instance in instances:
             print(instance)
+            
+    return 0
     
 def parseArgs():
 
